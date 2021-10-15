@@ -21,9 +21,9 @@ if files:
         df = df.append(temp_df)
 
     #st.write(f'{f.name[:-4]}')
-    df['Sub ID 3'] = df['Sub ID 3'].str.replace('",void 0', '')
+    #df['Sub ID 3'] = df['Sub ID 3'].str.replace('",void 0', '')
     df['Sub ID 5'] = df['Sub ID 5'].astype(str)
-    #df['Price']    = df['Price'].replace('\$|,', '', regex=True).astype(float)
+    df['Price']    = df['Price'].replace('\$|,', '', regex=True).astype(float)
 
     ids = st.sidebar.multiselect('Select:', options=df['Sub ID 5'].unique())
 
