@@ -29,10 +29,14 @@ if files:
 
     ids = st.sidebar.multiselect('Select:', options=df['Sub ID 5'].unique())
 
+    group_by = st.sidebar.radio('Group by',
+                                ('Sub ID 3', 'Sub ID 2')
+                                 )
+
     if ids:
         #st.write(ids)
-        st.write(df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Price']].\
-                    groupby(['Sub ID 3']).sum().sort_values('Price', ascending=False))
+        st.write(df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
+                    groupby([group_by]).sum().sort_values('Price', ascending=False))
     else:
         st.write('none selected')
         st.write(df)
