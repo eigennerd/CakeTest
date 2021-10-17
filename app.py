@@ -36,8 +36,9 @@ if files:
 
     if ids:
         #st.write(ids)
-        st.write(df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
-                    groupby([group_by]).sum().sort_values('Price', ascending=False).reset_index())
+        st.dataframe(df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
+                    groupby([group_by]).sum().sort_values('Price', ascending=False).reset_index(),
+                    height = 800)
     else:
         st.write('none selected')
         st.write(df)
