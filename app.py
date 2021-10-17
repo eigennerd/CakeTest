@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 import openpyxl
-import pyperclip
 
 from bokeh.models.widgets import Button
 from bokeh.models import CustomJS
