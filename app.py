@@ -47,19 +47,19 @@ if files:
         st.dataframe(output_df,
                     height = 800)
 
-        copy_button = Button(label="Copy to Clipboard")
-
-        copy_button.js_on_event("button_click", CustomJS(args=dict(df=output_df.to_csv(sep='\t')), code="""
-            navigator.clipboard.writeText(df);
-            """))
-
-        no_event = streamlit_bokeh_events(
-            copy_button,
-            events="GET_TEXT",
-            key="get_text",
-            refresh_on_update=True,
-            override_height=75,
-            debounce_time=0)
+        # copy_button = Button(label="Copy to Clipboard")
+        #
+        # copy_button.js_on_event("button_click", CustomJS(args=dict(df=output_df.to_csv(sep='\t')), code="""
+        #     navigator.clipboard.writeText(df);
+        #     """))
+        #
+        # no_event = streamlit_bokeh_events(
+        #     copy_button,
+        #     events="GET_TEXT",
+        #     key="get_text",
+        #     refresh_on_update=True,
+        #     override_height=75,
+        #     debounce_time=0)
 
     else:
         st.write('none selected')
