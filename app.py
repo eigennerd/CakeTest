@@ -2,6 +2,10 @@ import pandas as pd
 import streamlit as st
 import openpyxl
 
+from bokeh.models.widgets import Button
+from bokeh.models import CustomJS
+from streamlit_bokeh_events import streamlit_bokeh_events
+
 st.set_page_config(page_title="Cake",
                    page_icon="🎂",
 
@@ -36,9 +40,27 @@ if files:
 
     if ids:
         #st.write(ids)
-        st.dataframe(df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
-                    groupby([group_by]).sum().sort_values('Price', ascending=False).reset_index(),
+
+        output_df = df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
+                    groupby([group_by]).sum().sort_values('Price', ascending=False).reset_index()
+
+        st.dataframe(output_df,
                     height = 800)
+
+        copy_button = Button(label="Copy to Clipboard")
+
+        copy_button.js_on_event("button_click", CustomJS(args=dict(df=output_df.to_csv(sep='\t')), code="""
+            navigator.clipboard.writeText(df);
+            """))
+
+        no_event = streamlit_bokeh_events(
+            copy_button,
+            events="GET_TEXT",
+            key="get_text",
+            refresh_on_update=True,
+            override_height=75,
+            debounce_time=0)
+
     else:
         st.write('none selected')
         st.write(df)
