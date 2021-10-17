@@ -4,6 +4,7 @@ import openpyxl
 
 st.set_page_config(page_title="Cake",
                    page_icon="🎂",
+
                    layout='wide')
 
 st.header('Cake')
@@ -36,7 +37,7 @@ if files:
     if ids:
         #st.write(ids)
         st.write(df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
-                    groupby([group_by]).sum().sort_values('Price', ascending=False))
+                    groupby([group_by]).sum().sort_values('Price', ascending=False).reset_index())
     else:
         st.write('none selected')
         st.write(df)
