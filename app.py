@@ -41,16 +41,17 @@ if files:
     if ids:
         #st.write(ids)
 
-        output_df = df.loc[df['Sub ID 5'].isin(ids)][['Sub ID 3', 'Sub ID 2', 'Price']].\
+        output_df = df.loc[df['Sub ID 5'].isin(ids)][[group_by, 'Price']].\
                     groupby([group_by]).sum().sort_values('Price', ascending=False).reset_index()
 
-        st.dataframe(output_df,
-                    height = 800)
+        st.write(output_df.to_html(index=False), unsafe_allow_html=True)
+                   # height = 800
 
-        butt = st.button('Copy to Clipboard')
 
-        if butt:
-            output_df.to_clipboard()
+        # butt = st.button('Copy to Clipboard')
+        #
+        # if butt:
+        #     output_df.to_clipboard()
 
     else:
         st.write('none selected')
