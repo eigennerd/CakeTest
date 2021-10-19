@@ -71,9 +71,13 @@ def read_fb(file):
 
         output['Adset'] = output['Adset'].str.replace(' ','').str.rstrip('|')
 
-        output = output.dropna()
+        output = output.dropna(subset=['Cost', 'FB Purchases'])
 
-        output[['adset_id', 'age']] = output.apply(identify_adset, axis=1, result_type='expand')
+        if output.shape[0]==0:
+            st.warning('No Results or Costs in the file')
+            output = output.append(pd.DataFrame(columns=['adset_id', 'age']))
+        else:
+            output[['adset_id', 'age']] = output.apply(identify_adset, axis=1, result_type='expand')
 
         return output
 
