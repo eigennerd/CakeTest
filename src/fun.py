@@ -1,5 +1,23 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+
+def identify_adset(row):
+    adset_id = ''
+    age = ''
+
+    adset_values = row[[0]].str.split('|')
+
+    for v in adset_values['Adset']:
+        #print(v)
+        if 'ad' in v[0:2]:
+            #print(f'ad: {v}')
+            adset_id = v
+        elif v[0].isdigit():
+            #print(f'age: {v}')
+            age = v
+
+    return adset_id, age
 
 @st.cache()
 def read_cake(files):
@@ -23,9 +41,11 @@ def read_cake(files):
     return df
 
 
-
+#@st.cache()
 def read_fb(file):
+
     output = pd.read_csv(file)
+    adset_id = pd.DataFrame()
 
     if 'Ad set name' in output.columns.values:
         #st.write(output.columns.values)
@@ -37,7 +57,7 @@ def read_fb(file):
             .rename(
                 columns={
                     'Ad set name':'Adset',
-                    'Results': 'FB Purchase',
+                    'Results': 'FB Purchases',
                     'Amount spent (USD)':'Cost',
                     'CPC (cost per link click)':'CPC',
                     'CTR (link click-through rate)':'CTR'
@@ -46,7 +66,11 @@ def read_fb(file):
 
         output['Adset'] = output['Adset'].str.replace(' ','')
 
-        return output.dropna()
+        output = output.dropna()
+
+        output[['adset_id', 'age']] = output.apply(identify_adset, axis=1, result_type='expand')
+
+        return output
 
     else:
         st.sidebar.error('Wrong FB file')
