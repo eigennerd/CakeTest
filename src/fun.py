@@ -13,8 +13,9 @@ def read_cake(files):
 
         # st.write(df)
         # st.write(f'{f.name[:-4]}')
-    df['Sub ID 3'] = df['Sub ID 3'].str.replace('",void 0', '')
-    df['Sub ID 5'] = df['Sub ID 5'].astype(str)
+    df['Sub ID 2'] = df['Sub ID 2'].str.replace(' ', '')
+    df['Sub ID 3'] = df['Sub ID 3'].str.replace('",void 0', '').replace(' ', '')
+    df['Sub ID 5'] = df['Sub ID 5'].astype(str).replace(' ', '')
     df['Price'] = df['Price'].replace('\$|,', '', regex=True).astype(float)
 
     df = df.rename(columns={'Price':'Revenue'})
@@ -26,19 +27,27 @@ def read_cake(files):
 def read_fb(file):
     output = pd.read_csv(file)
 
-    output = output[['Ad set name',
-                     'Results',
-                     'Amount spent (USD)',
-                     'CPC (cost per link click)',
-                     'CTR (link click-through rate)']]\
-        .rename(
-            columns={
-                'Ad set name':'Adset',
-                'Results': 'FB Purchase',
-                'Amount spent (USD)':'Cost',
-                'CPC (cost per link click)':'CPC',
-                'CTR (link click-through rate)':'CTR'
-            }
-        )
+    if 'Ad set name' in output.columns.values:
+        #st.write(output.columns.values)
+        output = output[['Ad set name',
+                         'Results',
+                         'Amount spent (USD)',
+                         'CPC (cost per link click)',
+                         'CTR (link click-through rate)']]\
+            .rename(
+                columns={
+                    'Ad set name':'Adset',
+                    'Results': 'FB Purchase',
+                    'Amount spent (USD)':'Cost',
+                    'CPC (cost per link click)':'CPC',
+                    'CTR (link click-through rate)':'CTR'
+                }
+            )
 
-    return output
+        output['Adset'] = output['Adset'].str.replace(' ','')
+
+        return output.dropna()
+
+    else:
+        st.sidebar.error('Wrong FB file')
+        return pd.DataFrame()

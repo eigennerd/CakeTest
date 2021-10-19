@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import streamlit as st
 import openpyxl
@@ -24,7 +25,7 @@ if files:
 
     df = read_cake(files)
 
-    ids = st.sidebar.multiselect('Select Subs:', options=df['Sub ID 5'].unique())
+    ids = st.sidebar.selectbox('Select Pixels:', options=np.delete(df['Sub ID 5'].unique(), np.where(df['Sub ID 5'].unique()=='nan')))
 
     group_by = st.sidebar.radio('Group by',
                                 ('Sub ID 3', 'Sub ID 2')
@@ -37,8 +38,10 @@ if files:
         col1, col2 = st.columns([1,2])
         with col1:
             with st.expander('Cake Data (Expand)', expanded=True):
-                output_df = df.loc[df['Sub ID 5'].isin(ids)][[group_by, 'Revenue']]. \
+                output_df = df.loc[df['Sub ID 5'].isin([ids])][[group_by, 'Revenue']]. \
                     groupby([group_by]).sum().sort_values('Revenue', ascending=False).reset_index()
+
+                output_df.rename(columns={output_df.columns[0]:"Adset"}, inplace=True)
 
                 st.write(output_df.to_html(index=False), unsafe_allow_html=True)
                            # height = 800
