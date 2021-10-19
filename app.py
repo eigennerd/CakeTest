@@ -57,8 +57,10 @@ if files:
                                     how='left')
 
             with col2:
+                with st.expander('FB data', expanded=False):
+                    st.write(fb_df.to_html(index=False), unsafe_allow_html=True)
                 with st.expander('Detected adsets:', expanded=True):
-                    st.write(merged_df.drop(columns=['adset_id', 'age']).dropna()[col_order].to_html(index=False),
+                    st.write(merged_df.drop(columns=['adset_id', 'age']).dropna(subset=['Revenue'])[col_order].to_html(index=False),
                              unsafe_allow_html=True)
                     st.write(' ')
 

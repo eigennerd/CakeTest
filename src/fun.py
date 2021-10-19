@@ -17,6 +17,8 @@ def identify_adset(row):
             #print(f'age: {v}')
             age = v
 
+    age = '26-65' if age=='' else age
+
     return adset_id, age
 
 @st.cache()
@@ -31,8 +33,8 @@ def read_cake(files):
 
         # st.write(df)
         # st.write(f'{f.name[:-4]}')
-    df['Sub ID 2'] = df['Sub ID 2'].str.replace(' ', '')
-    df['Sub ID 3'] = df['Sub ID 3'].str.replace('",void 0', '').replace(' ', '')
+    df['Sub ID 2'] = df['Sub ID 2'].str.replace(' ', '').str.rstrip('|')
+    df['Sub ID 3'] = df['Sub ID 3'].str.replace('",void 0', '').replace(' ', '').str.rstrip('|')
     df['Sub ID 5'] = df['Sub ID 5'].astype(str).replace(' ', '')
     df['Price'] = df['Price'].replace('\$|,', '', regex=True).astype(float)
 
@@ -64,7 +66,7 @@ def read_fb(file):
                 }
             )
 
-        output['Adset'] = output['Adset'].str.replace(' ','')
+        output['Adset'] = output['Adset'].str.replace(' ','').str.rstrip('|')
 
         output = output.dropna()
 
@@ -74,4 +76,12 @@ def read_fb(file):
 
     else:
         st.sidebar.error('Wrong FB file')
-        return pd.DataFrame()
+        return pd.DataFrame(columns=[
+                                'Adset',
+                                'FB Purchases',
+                                'Cost',
+                                'CPC',
+                                'CTR',
+                                'adset_id',
+                                'age'
+                                ])
