@@ -49,6 +49,9 @@ def read_fb(file):
     output = pd.read_csv(file)
     adset_id = pd.DataFrame()
 
+    if 'Ad name' in output.columns.values:
+        output = output.rename(columns={'Ad name': 'Ad set name'})
+
     if 'Ad set name' in output.columns.values:
         #st.write(output.columns.values)
         output = output[['Ad set name',
